@@ -6,13 +6,13 @@ const fetchProducts = async () => {
     const lista = await response.json();
     const data = lista.results;
     const products = data.map((product) => {
-    const result = {
-      sku: product.id,
-      name: product.title,
-      image: product.thumbnail,
-    };
-    return result;
-  });
+      const result = {
+        sku: product.id,
+        name: product.title,
+        image: product.thumbnail,
+      };
+      return result;
+    });
   return products;
   } catch (error) {
     return error;
