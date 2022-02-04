@@ -1,5 +1,29 @@
 const items = document.querySelector('.items');
 const cartItems = document.querySelector('.cart__items');
+const cart = document.querySelector('.cart');
+const span = document.createElement('span');
+span.className = 'total-price';
+cart.appendChild(span);
+
+const getTotalPrice = () => {
+  if (span.childNodes.length > 0) {
+    const erro = span.firstElementChild;
+    span.removeChild(erro);
+  }
+  const array = [];
+  const p = document.createElement('p');
+  const li = cartItems.childNodes;
+  li.forEach((product) => {
+    const text = product.innerText;
+    const index = text.indexOf('$') + 1;
+    const value = text.substr(index);
+    const price = parseFloat(value);
+    array.push(price);
+  });
+  const price = array.reduce((acc, curr) => acc + curr, 0);
+  p.innerText = price;
+  span.appendChild(p);
+};
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -35,6 +59,12 @@ function cartItemClickListener(event) {
   const product = event.target;
   product.remove();
   saveCartItems(cartItems);
+  if (cartItems.childNodes.length > 0) {
+    getTotalPrice(); 
+  } else {
+    const erro = span.firstElementChild;
+    span.removeChild(erro);
+  }
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -68,12 +98,15 @@ const addToCart = async () => {
   buttons.forEach((button) => {
     button.addEventListener('click', async (event) => {
       const father = event.target.parentElement;
-      const span = father.firstElementChild;
-      const id = span.innerText;
+      const div = father.firstElementChild;
+      const id = div.innerText;
       const objeto = await fetchItem(id);
       const item = createCartItemElement(objeto);
       cartItems.appendChild(item);
       saveCartItems(cartItems);
+      if (cartItems.childNodes.length > 0) {
+        getTotalPrice(); 
+      }
     });
   });
 };
