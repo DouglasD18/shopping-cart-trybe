@@ -1,9 +1,22 @@
 const items = document.querySelector('.items');
+const container = document.querySelector('.container');
 const cartItems = document.querySelector('.cart__items');
 const cart = document.querySelector('.cart');
 const span = document.createElement('span');
 span.className = 'total-price';
 cart.appendChild(span);
+
+const createLoadingMessage = () => {
+  const message = document.createElement('div');
+  message.className = 'loading';
+  message.innerText = 'carregando...';
+  container.appendChild(message);
+}; 
+
+const deleteLoadingMessage = () => {
+  message = container.lastChild;
+  container.removeChild(message);
+};
 
 const getTotalPrice = () => {
   if (span.childNodes.length > 0) {
@@ -51,10 +64,6 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
-/* function getSkuFromProductItem(item) {
-  return item.querySelector('span.item__sku').innerText;
-}  */
-
 function cartItemClickListener(event) {
   const product = event.target;
   product.remove();
@@ -76,7 +85,9 @@ function createCartItemElement({ sku, name, salePrice }) {
 }
 
 const insertItems = async () => {
+  createLoadingMessage();
   const products = await fetchProducts();
+  deleteLoadingMessage();
   products.forEach((product) => {
     const item = createProductItemElement(product);
     items.appendChild(item);
@@ -100,17 +111,17 @@ const addToCart = async () => {
       const father = event.target.parentElement;
       const div = father.firstElementChild;
       const id = div.innerText;
+      createLoadingMessage();
       const objeto = await fetchItem(id);
+      deleteLoadingMessage();
       const item = createCartItemElement(objeto);
       cartItems.appendChild(item);
       saveCartItems(cartItems);
-      if (cartItems.childNodes.length > 0) {
-        getTotalPrice(); 
-      }
+      if (cartItems.childNodes.length > 0) { getTotalPrice(); }
     });
   });
 };
 
-window.onload = () => {
-  addToCart();
+window.onload = async () => {
+  await addToCart();
 };
