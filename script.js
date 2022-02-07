@@ -6,6 +6,7 @@ const span = document.createElement('span');
 span.className = 'total-price';
 cart.appendChild(span);
 
+// Cria mensagem de carregamento enquanto está sendo feita a requisição à API.
 const createLoadingMessage = () => {
   const message = document.createElement('div');
   message.className = 'loading';
@@ -13,18 +14,18 @@ const createLoadingMessage = () => {
   container.appendChild(message);
 }; 
 
+// Deleta a mensagem de carregamento.
 const deleteLoadingMessage = () => {
   message = container.lastChild;
   container.removeChild(message);
 };
 
+// Calcula o preço total dos produtos que estão no carrinho de compras.
 const getTotalPrice = () => {
-  if (span.childNodes.length > 0) {
-    const erro = span.firstElementChild;
-    span.removeChild(erro);
-  }
+  span.innerHTML = '';
   const array = [];
   const p = document.createElement('p');
+  p.className = 'price';
   const li = cartItems.childNodes;
   li.forEach((product) => {
     const text = product.innerText;
@@ -64,6 +65,7 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
+// Retira o produto clicado do carrinho de compras atualiza o localStorage e o preço total.
 function cartItemClickListener(event) {
   const product = event.target;
   product.remove();
@@ -71,6 +73,7 @@ function cartItemClickListener(event) {
   getTotalPrice(); 
 }
 
+// Adiciona o produto ao carinho de compras
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
@@ -79,6 +82,7 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
+// Adiciona os produtos ao catálogo.
 const insertItems = async () => {
   createLoadingMessage();
   const products = await fetchProducts('computador');
@@ -98,6 +102,7 @@ const insertItems = async () => {
   });
 };
 
+// Atualiza o cariinho de compras através do localStorage.
 const getSaveItems = () => {
   cartItems.innerHTML = getSavedCartItems();
   const li = cartItems.childNodes;
@@ -107,6 +112,7 @@ const getSaveItems = () => {
   getTotalPrice();
 };
 
+// Retorna as informações necessárias dos produtos.
 const necessity = (data) => {
     const result = {
       sku: data.id,
@@ -116,6 +122,7 @@ const necessity = (data) => {
     return result;
 };
 
+// Adiciona os produtos clicados ao carrinho de compras e atualiza o localStorage e o preço total.
 const addInClick = (buttons) => {
   buttons.forEach((button) => {
     button.addEventListener('click', async (event) => {
@@ -134,6 +141,7 @@ const addInClick = (buttons) => {
   });
 };
 
+// Limpa o carrinho de compra e atualiza o localStorage e o preço total.
 const clearCart = () => {
   const vanish = document.querySelector('.empty-cart');
   vanish.addEventListener('click', () => {
@@ -143,6 +151,7 @@ const clearCart = () => {
   });
 };
 
+// Faz toda a lógica do site acontecer.
 const addToCart = async () => {
   await insertItems();
   getSaveItems();

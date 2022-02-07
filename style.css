@@ -102,6 +102,10 @@ body {
   box-sizing: border-box;
 }
 
+.item:hover {
+  box-shadow: 3px 5px 16px -1px rgba(15, 15, 15, 0.59);
+}
+
 .item .item__sku {
   display: none;
 }
@@ -140,10 +144,31 @@ body {
   overflow-y: scroll;
 }
 
+.cart__items li {
+  padding: 2px;
+  margin: 5px 0 10px;
+  background-color: rgb(150, 189, 223);
+}
+
 .empty-cart {
   width: 170px;
   height: 35px;
   margin: 0 auto;
   border: 2px solid rgb(5, 52, 219);
   background-color: rgb(249, 249, 246);
+  cursor: pointer;
+}
+
+.empty-cart:hover {
+  transition: 250ms;
+  font-weight: bold;
+  background-color: red;
+  border: 2px solid black;
+}
+
+.price {
+  text-align: center;
+  color: green;
+  margin-top: 15px;
+  font-size: 18px;
 }
