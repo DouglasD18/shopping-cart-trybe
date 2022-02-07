@@ -4,12 +4,7 @@ const fetchItem = async (id) => {
   try {
     const response = await fetch(url);
     const data = await response.json();
-    const result = {
-      sku: data.id,
-      name: data.title,
-      salePrice: data.price,
-    };
-    return result;
+    return data;
   } catch (error) {
     return error;
   }

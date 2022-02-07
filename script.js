@@ -86,9 +86,18 @@ function createCartItemElement({ sku, name, salePrice }) {
 
 const insertItems = async () => {
   createLoadingMessage();
-  const products = await fetchProducts();
+  const products = await fetchProducts('computador');
   deleteLoadingMessage();
-  products.forEach((product) => {
+  const { results } = products;
+  const values = results.map((product) => {
+    const result = {
+      sku: product.id,
+      name: product.title,
+      image: product.thumbnail,
+    };
+    return result;
+  });
+  values.forEach((product) => {
     const item = createProductItemElement(product);
     items.appendChild(item);
   });
@@ -100,6 +109,15 @@ const getSaveItems = () => {
   li.forEach((product) => {
     product.addEventListener('click', cartItemClickListener);
   });
+};
+
+const necessity = (data) => {
+    const result = {
+      sku: data.id,
+      name: data.title,
+      salePrice: data.price,
+    };
+    return result;
 };
 
 const addToCart = async () => {
@@ -114,7 +132,8 @@ const addToCart = async () => {
       createLoadingMessage();
       const objeto = await fetchItem(id);
       deleteLoadingMessage();
-      const item = createCartItemElement(objeto);
+      const need = necessity(objeto);
+      const item = createCartItemElement(need);
       cartItems.appendChild(item);
       saveCartItems(cartItems);
       if (cartItems.childNodes.length > 0) { getTotalPrice(); }
