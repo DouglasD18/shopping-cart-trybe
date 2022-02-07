@@ -116,10 +116,7 @@ const necessity = (data) => {
     return result;
 };
 
-const addToCart = async () => {
-  await insertItems();
-  getSaveItems();
-  const buttons = document.querySelectorAll('.item__add');
+const addInClick = (buttons) => {
   buttons.forEach((button) => {
     button.addEventListener('click', async (event) => {
       const father = event.target.parentElement;
@@ -135,6 +132,23 @@ const addToCart = async () => {
       getTotalPrice(); 
     });
   });
+};
+
+const clearCart = () => {
+  const vanish = document.querySelector('.empty-cart');
+  vanish.addEventListener('click', () => {
+    cartItems.innerHTML = '';
+    getTotalPrice();
+    saveCartItems(cartItems);
+  });
+};
+
+const addToCart = async () => {
+  await insertItems();
+  getSaveItems();
+  clearCart();
+  const buttons = document.querySelectorAll('.item__add');
+  addInClick(buttons);
 };
 
 window.onload = async () => {
