@@ -35,7 +35,7 @@ const getTotalPrice = () => {
     array.push(price);
   });
   const price = array.reduce((acc, curr) => acc + curr, 0);
-  p.innerText = price;
+  p.innerText = price.toFixed(2);
   span.appendChild(p);
 };
 
